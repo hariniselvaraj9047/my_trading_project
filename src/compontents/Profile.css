@@ -1,0 +1,133 @@
+.profile-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
+  max-width: 450px;
+  backdrop-filter: blur(12px);
+  animation: fadeIn 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Picture */
+.profile-pic-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.profile-pic {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e3c9e6;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile-pic:hover {
+  transform: scale(1.1);
+}
+
+input[type="file"] {
+  margin-top: 8px;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Watchlist */
+.watchlist {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.watchlist li {
+  margin: 8px 0;
+}
+
+.watchlist a {
+  color: #d8c9e9;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease-in-out;
+}
+
+.watchlist a:hover {
+  color: #f2a65a;
+  text-decoration: underline;
+}
+
+/* Logout Button */
+.logout-btn-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.logout-btn {
+  padding: 12px;
+  background-color: #9e7dc4;
+  border: none;
+  border-radius: 8px;
+  color: #1a0026;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+  width: 80%; /* Fixed size like login/register */
+  max-width: 250px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.logout-btn:hover {
+  background-color: #5d4c94;
+  transform: scale(1.05);
+}
+
+/* Media Queries for Better Responsiveness */
+@media (max-width: 768px) {
+  .profile-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .profile-pic {
+    width: 80px;
+    height: 80px;
+  }
+
+  input[type="file"] {
+    font-size: 12px;
+  }
+
+  .watchlist a {
+    font-size: 14px;
+  }
+
+  .logout-btn {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    max-width: 95%;
+  }
+
+  .profile-pic {
+    width: 70px;
+    height: 70px;
+  }
+
+  .logout-btn {
+    font-size: 13px;
+  }
+}

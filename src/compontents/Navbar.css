@@ -1,0 +1,52 @@
+.navbar {
+   position: fixed; /* Keeps navbar at the top */
+   top: 0;
+   left: 0;
+   width: 100%; /* Covers full width */
+   background: linear-gradient(to right, #1a0026, #3b1e58);
+   padding: 15px 0;
+   text-align: center;
+   border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+   z-index: 1000; /* Ensures navbar stays on top */
+}
+
+.navbar ul {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+   display: flex;
+   justify-content: center;
+   gap: 25px;
+}
+
+.navbar ul li {
+   display: inline;
+}
+
+.navbar ul li a {
+   color: white;
+   text-decoration: none;
+   font-size: 18px;
+   padding: 10px 15px;
+   border-radius: 6px;
+   transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.navbar ul li a:hover {
+   background: rgba(255, 255, 255, 0.2);
+   transform: scale(1.1);
+}
+
+/* Adjust content spacing to prevent navbar overlap */
+body {
+   padding-top: 60px; /* Pushes content down to make space for the fixed navbar */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+   .navbar ul {
+       flex-direction: column;
+       gap: 10px;
+   }
+}

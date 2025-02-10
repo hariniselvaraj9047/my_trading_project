@@ -1,0 +1,139 @@
+/* Global Styling */
+body {
+  background: linear-gradient(to right, #1a0026, #3b1e58);
+  font-family: "Inter", "Nunito", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  color: white;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* Chart Container */
+.chart-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 900px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Chart Wrapper to Allow Scrolling */
+.chart-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Enable scrolling if the chart is too wide */
+  display: flex;
+  justify-content: center;
+}
+
+/* Chart */
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+button {
+  background-color: #9e7dc4;
+  color: #1a0026;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #5d4c94;
+  transform: scale(1.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .chart-container {
+    width: 95%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .controls {
+    gap: 12px;
+  }
+
+  .checkbox-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button {
+    width: 100%;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-container {
+    padding: 15px;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .chart-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .checkbox-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+  }
+}
