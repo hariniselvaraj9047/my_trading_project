@@ -10,30 +10,9 @@ const NewsFeed = () => {
   const [articles, setArticles] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState(["trading"]); // Default
 
-  useEffect(() => {
-    const fetchPreferences = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const prefs = docSnap.data().preferences || ["trading"];
-          setSelectedCategories(prefs);
-          fetchNews(prefs);
-        } else {
-          fetchNews(["trading"]);
-        }
-      } else {
-        fetchNews(["trading"]);
-      }
-    };
-
-    fetchPreferences();
-    const interval = setInterval(() => fetchNews(selectedCategories), 300000);
-    return () => clearInterval(interval);
-  }, []);
-
+  // Fetch news articles based on selected categories
   const fetchNews = async (categories) => {
+    if (categories.length === 0) return;
     const queries = categories.map((cat) => `q=${cat}`).join("&");
     const NEWS_URL = `https://newsapi.org/v2/everything?${queries}&sortBy=publishedAt&apiKey=${API_KEY}`;
 
@@ -44,6 +23,30 @@ const NewsFeed = () => {
       console.error("Error fetching news:", error);
     }
   };
+
+  // Fetch user preferences from Firestore
+  useEffect(() => {
+    const fetchPreferences = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const prefs = docSnap.data().preferences || ["trading"];
+          setSelectedCategories(prefs);
+        }
+      }
+    };
+
+    fetchPreferences();
+  }, []);
+
+  // Fetch news when selectedCategories change
+  useEffect(() => {
+    fetchNews(selectedCategories);
+    const interval = setInterval(() => fetchNews(selectedCategories), 300000);
+    return () => clearInterval(interval);
+  }, [selectedCategories]);
 
   // When clicking "Read More", automatically save the article to the watchlist
   const handleReadMore = async (article) => {
@@ -61,10 +64,7 @@ const NewsFeed = () => {
           <button
             key={category}
             className={selectedCategories.includes(category.toLowerCase()) ? "active" : ""}
-            onClick={() => {
-              setSelectedCategories([category.toLowerCase()]);
-              fetchNews([category.toLowerCase()]);
-            }}
+            onClick={() => setSelectedCategories([category.toLowerCase()])}
           >
             {category}
           </button>

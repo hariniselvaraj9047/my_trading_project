@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import "./Tradingchart.css"
+import "./Tradingchart.css";
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -20,11 +20,7 @@ const TradingChart = () => {
   const [selectedIndicators, setSelectedIndicators] = useState(["50-MA"]);
   const [strategyApplied, setStrategyApplied] = useState(false);
 
-  useEffect(() => {
-    generateRandomData();
-  }, [selectedIndicators, strategyApplied]);
-
-  const generateRandomData = () => {
+  const generateRandomData = useCallback(() => {
     const dataPoints = 100;
     const prices = [];
     let lastPrice = 50;
@@ -94,7 +90,11 @@ const TradingChart = () => {
         },
       ].filter(Boolean),
     });
-  };
+  }, [selectedIndicators, strategyApplied]); // Dependencies added
+
+  useEffect(() => {
+    generateRandomData();
+  }, [generateRandomData]);
 
   const calculateMovingAverage = (prices, period) => {
     return prices.map((_, index, arr) => {
