@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { db, auth } from "./Firebase"; // Import Firebase config
 import { doc, getDoc } from "firebase/firestore";
-import { saveToWatchlist } from "./Watchlistservice"; // Import saveToWatchlist function
+import { saveToWatchlist } from "./Watchlistservice"; // Import the saveToWatchlist function
 import "./Newsfeed.css";
 
-const API_KEY = process.env.REACT_APP_MY_NEWSAPI_KEY; // Replace with your NewsAPI key
-const PROXY_URL = "https://cors-anywhere.herokuapp.com/"; // Free CORS Proxy
+const API_KEY =process.env.REACT_APP_MY_NEWSAPI_KEY ; // Replace with your NewsAPI key
 
 const NewsFeed = () => {
   const [articles, setArticles] = useState([]);
@@ -39,7 +38,7 @@ const NewsFeed = () => {
     const NEWS_URL = `https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY}`;
 
     try {
-      const response = await axios.get(PROXY_URL + NEWS_URL);
+      const response = await axios.get(NEWS_URL);
       setArticles(response.data.articles.slice(0, 20));
     } catch (error) {
       console.error("Error fetching news:", error);
