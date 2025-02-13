@@ -2,54 +2,74 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { db, auth } from "./Firebase"; // Import Firebase config
 import { doc, getDoc } from "firebase/firestore";
-import { saveToWatchlist } from "./Watchlistservice"; // Import the saveToWatchlist function
+import { saveToWatchlist } from "./Watchlistservice"; // Import saveToWatchlist function
 import "./Newsfeed.css";
 
-const API_KEY =process.env.REACT_APP_MY_NEWSAPI_KEY ; // Replace with your NewsAPI key
+// Ensure environment variable is correctly loaded
+const API_KEY = process.env.REACT_APP_MY_NEWSAPI_KEY;
+if (!API_KEY) {
+  console.error("🚨 ERROR: News API Key is missing! Ensure it's set in .env file.");
+}
 
 const NewsFeed = () => {
   const [articles, setArticles] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("trading"); // Default category
 
+  // Fetch user preferences from Firestore
   useEffect(() => {
     const fetchPreferences = async () => {
       const user = auth.currentUser;
       if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const prefs = docSnap.data().preferences || ["trading"];
-          setSelectedCategory(prefs[0] || "trading");
-          fetchNews(prefs[0] || "trading");
-        } else {
-          fetchNews("trading");
+        try {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const prefs = docSnap.data().preferences || ["trading"];
+            setSelectedCategory(prefs[0] || "trading");
+          }
+        } catch (error) {
+          console.error("🚨 Error fetching user preferences:", error);
         }
-      } else {
-        fetchNews("trading");
       }
     };
 
     fetchPreferences();
+  }, []);
+
+  // Fetch news whenever category changes
+  useEffect(() => {
+    if (selectedCategory) {
+      fetchNews(selectedCategory);
+    }
     const interval = setInterval(() => fetchNews(selectedCategory), 300000);
     return () => clearInterval(interval);
   }, [selectedCategory]);
 
+  // Fetch News Data
   const fetchNews = async (category) => {
-    const NEWS_URL = `https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY}`;
-
     try {
+      const NEWS_URL = `https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY}`;
+      console.log("📢 Fetching news for category:", category);
+      
       const response = await axios.get(NEWS_URL);
-      setArticles(response.data.articles.slice(0, 20));
+      if (response.data.articles) {
+        setArticles(response.data.articles.slice(0, 20));
+      } else {
+        console.error("🚨 Unexpected API response:", response.data);
+        setArticles([]);
+      }
     } catch (error) {
-      console.error("Error fetching news:", error);
+      console.error("🚨 Error fetching news:", error.response ? error.response.data : error.message);
     }
   };
 
+  // Handle Category Change
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    fetchNews(category);
+    const mappedCategory = category.toLowerCase() === "all" ? "trading" : category.toLowerCase();
+    setSelectedCategory(mappedCategory);
   };
 
+  // Handle "Read More" Click
   const handleReadMore = async (article) => {
     await saveToWatchlist(article);
     window.open(article.url, "_blank");
@@ -65,7 +85,7 @@ const NewsFeed = () => {
           <button
             key={category}
             className={selectedCategory === category.toLowerCase() ? "active" : ""}
-            onClick={() => handleCategoryChange(category.toLowerCase())}
+            onClick={() => handleCategoryChange(category)}
           >
             {category}
           </button>
@@ -93,7 +113,7 @@ const NewsFeed = () => {
             </div>
           ))
         ) : (
-          <p>No news available.</p>
+          <p>No news available. Please check your API key and category selection.</p>
         )}
       </div>
     </div>
