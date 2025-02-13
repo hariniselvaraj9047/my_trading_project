@@ -48,10 +48,14 @@ const NewsFeed = () => {
   // Fetch News Data
   const fetchNews = async (category) => {
     try {
-      const NEWS_URL = `https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY}`;
-      console.log("📢 Fetching news for category:", category);
-      
-      const response = await axios.get(NEWS_URL);
+      const NEWS_URL =` https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY} `;
+  
+      const response = await axios.get(NEWS_URL, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+      });
+  
       if (response.data.articles) {
         setArticles(response.data.articles.slice(0, 20));
       } else {
