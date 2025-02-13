@@ -2,29 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { db, auth } from "./Firebase"; // Import Firebase config
 import { doc, getDoc } from "firebase/firestore";
-import { saveToWatchlist } from "./Watchlistservice"; // Import the saveToWatchlist function
+import { saveToWatchlist } from "./Watchlistservice"; // Import saveToWatchlist function
 import "./Newsfeed.css";
 
+const API_KEY = "c77b0f55e26b4d35856adee64101339b"; // Replace with your NewsAPI key
+const PROXY_URL = "https://cors-anywhere.herokuapp.com/"; // Free CORS Proxy
+
 const NewsFeed = () => {
-  const API_KEY = "c77b0f55e26b4d35856adee64101339b";
   const [articles, setArticles] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState(["trading"]); // Default
+  const [selectedCategory, setSelectedCategory] = useState("trading"); // Default category
 
-  // Fetch news articles based on selected categories
-  const fetchNews = async (categories) => {
-    if (categories.length === 0) return;
-    const queries = categories.map((cat) => `q=${cat}`).join("&");
-    const NEWS_URL = `https://newsapi.org/v2/everything?${queries}&sortBy=publishedAt&apiKey=${API_KEY}`;
-
-    try {
-      const response = await axios.get(NEWS_URL);
-      setArticles(response.data.articles.slice(0, 20));
-    } catch (error) {
-      console.error("Error fetching news:", error);
-    }
-  };
-
-  // Fetch user preferences from Firestore
   useEffect(() => {
     const fetchPreferences = async () => {
       const user = auth.currentUser;
@@ -33,25 +20,40 @@ const NewsFeed = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const prefs = docSnap.data().preferences || ["trading"];
-          setSelectedCategories(prefs);
+          setSelectedCategory(prefs[0] || "trading");
+          fetchNews(prefs[0] || "trading");
+        } else {
+          fetchNews("trading");
         }
+      } else {
+        fetchNews("trading");
       }
     };
 
     fetchPreferences();
-  }, []);
-
-  // Fetch news when selectedCategories change
-  useEffect(() => {
-    fetchNews(selectedCategories);
-    const interval = setInterval(() => fetchNews(selectedCategories), 300000);
+    const interval = setInterval(() => fetchNews(selectedCategory), 300000);
     return () => clearInterval(interval);
-  }, [selectedCategories]);
+  }, [selectedCategory]);
 
-  // When clicking "Read More", automatically save the article to the watchlist
+  const fetchNews = async (category) => {
+    const NEWS_URL = `https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY}`;
+
+    try {
+      const response = await axios.get(PROXY_URL + NEWS_URL);
+      setArticles(response.data.articles.slice(0, 20));
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    fetchNews(category);
+  };
+
   const handleReadMore = async (article) => {
-    await saveToWatchlist(article); // Save the article to the watchlist
-    window.open(article.url, "_blank"); // Open the news article in a new tab
+    await saveToWatchlist(article);
+    window.open(article.url, "_blank");
   };
 
   return (
@@ -63,8 +65,8 @@ const NewsFeed = () => {
         {["All", "Stocks", "Crypto", "Forex", "Commodities"].map((category) => (
           <button
             key={category}
-            className={selectedCategories.includes(category.toLowerCase()) ? "active" : ""}
-            onClick={() => setSelectedCategories([category.toLowerCase()])}
+            className={selectedCategory === category.toLowerCase() ? "active" : ""}
+            onClick={() => handleCategoryChange(category.toLowerCase())}
           >
             {category}
           </button>
