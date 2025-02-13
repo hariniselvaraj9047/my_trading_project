@@ -5,7 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { saveToWatchlist } from "./Watchlistservice"; // Import saveToWatchlist function
 import "./Newsfeed.css";
 
-const API_KEY = "c77b0f55e26b4d35856adee64101339b"; // Replace with your NewsAPI key
+const API_KEY = process.env.REACT_APP_MY_NEWSAPI_KEY; // Replace with your NewsAPI key
 const PROXY_URL = "https://cors-anywhere.herokuapp.com/"; // Free CORS Proxy
 
 const NewsFeed = () => {
