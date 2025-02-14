@@ -2,62 +2,25 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { db, auth } from "./Firebase"; // Import Firebase config
 import { doc, getDoc } from "firebase/firestore";
-import { saveToWatchlist } from "./Watchlistservice"; // Import saveToWatchlist function
+import { saveToWatchlist } from "./Watchlistservice"; // Import watchlist function
 import "./Newsfeed.css";
 
-// Ensure environment variable is correctly loaded
-const API_KEY = process.env.REACT_APP_MY_NEWSAPI_KEY;
-if (!API_KEY) {
-  console.error("🚨 ERROR: News API Key is missing! Ensure it's set in .env file.");
-}
+const API_KEY ="QL896HwnMDgalGAlFyVWiPwwUPaA8tfqY8e0-zsnfD6taQEw" // Replace with your Currents API key
 
 const NewsFeed = () => {
   const [articles, setArticles] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("trading"); // Default category
+  const [selectedCategories, setSelectedCategories] = useState(["trading"]); // Default category
 
-  // Fetch user preferences from Firestore
-  useEffect(() => {
-    const fetchPreferences = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        try {
-          const docRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const prefs = docSnap.data().preferences || ["trading"];
-            setSelectedCategory(prefs[0] || "trading");
-          }
-        } catch (error) {
-          console.error("🚨 Error fetching user preferences:", error);
-        }
-      }
-    };
+  // Fetch news from Currents API
+  const fetchNews = async (categories) => {
+    if (categories.length === 0) return;
+    const query = categories.join(" OR "); // Currents API supports OR-based keyword search
+    const NEWS_URL = `https://api.currentsapi.services/v1/search?keywords=${query}&language=en&apiKey=${API_KEY}`;
 
-    fetchPreferences();
-  }, []);
-
-  // Fetch news whenever category changes
-  useEffect(() => {
-    if (selectedCategory) {
-      fetchNews(selectedCategory);
-    }
-    const interval = setInterval(() => fetchNews(selectedCategory), 300000);
-    return () => clearInterval(interval);
-  }, [selectedCategory]);
-
-  // Fetch News Data
-  const fetchNews = async (category) => {
     try {
-      const NEWS_URL =` https://newsapi.org/v2/everything?q=${category}&sortBy=publishedAt&apiKey=${API_KEY} `;
-  
-      const response = await axios.get(NEWS_URL, {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
-      });
-  
-      if (response.data.articles) {
-        setArticles(response.data.articles.slice(0, 20));
+      const response = await axios.get(NEWS_URL);
+      if (response.data.news) {
+        setArticles(response.data.news.slice(0, 20));
       } else {
         console.error("🚨 Unexpected API response:", response.data);
         setArticles([]);
@@ -67,13 +30,31 @@ const NewsFeed = () => {
     }
   };
 
-  // Handle Category Change
-  const handleCategoryChange = (category) => {
-    const mappedCategory = category.toLowerCase() === "all" ? "trading" : category.toLowerCase();
-    setSelectedCategory(mappedCategory);
-  };
+  // Fetch user preferences from Firestore
+  useEffect(() => {
+    const fetchPreferences = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const prefs = docSnap.data().preferences || ["trading"];
+          setSelectedCategories(prefs);
+        }
+      }
+    };
 
-  // Handle "Read More" Click
+    fetchPreferences();
+  }, []);
+
+  // Fetch news when selectedCategories change
+  useEffect(() => {
+    fetchNews(selectedCategories);
+    const interval = setInterval(() => fetchNews(selectedCategories), 300000);
+    return () => clearInterval(interval);
+  }, [selectedCategories]);
+
+  // Handle "Read More" and save article to watchlist
   const handleReadMore = async (article) => {
     await saveToWatchlist(article);
     window.open(article.url, "_blank");
@@ -88,8 +69,8 @@ const NewsFeed = () => {
         {["All", "Stocks", "Crypto", "Forex", "Commodities"].map((category) => (
           <button
             key={category}
-            className={selectedCategory === category.toLowerCase() ? "active" : ""}
-            onClick={() => handleCategoryChange(category)}
+            className={selectedCategories.includes(category.toLowerCase()) ? "active" : ""}
+            onClick={() => setSelectedCategories([category.toLowerCase()])}
           >
             {category}
           </button>
@@ -102,6 +83,7 @@ const NewsFeed = () => {
           articles.map((article, index) => (
             <div key={index} className="news-item">
               <h3>{article.title}</h3>
+              {article.image && <img src={article.image} alt="News" width="200" />}
               <p>{article.description}</p>
               <a
                 href={article.url}
@@ -114,10 +96,11 @@ const NewsFeed = () => {
               >
                 Read More
               </a>
+              <p><small>Published on: {new Date(article.published * 1000).toLocaleString()}</small></p>
             </div>
           ))
         ) : (
-          <p>No news available. Please check your API key and category selection.</p>
+          <p>No news available.</p>
         )}
       </div>
     </div>
