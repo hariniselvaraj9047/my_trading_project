@@ -9,11 +9,11 @@ import {
   Title,
   Tooltip,
   Legend,
-  ScatterController, // ✅ Fix: Import ScatterController
+  ScatterController, 
 } from "chart.js";
 import "./Tradingchart.css";
 
-// ✅ Fix: Register ScatterController along with other components
+ 
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,7 +22,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ScatterController // ✅ Fix: Register ScatterController
+  ScatterController  
 );
 
 const TradingChart = () => {
@@ -48,10 +48,9 @@ const TradingChart = () => {
 
     const buySignals = prices.map((price, index) =>
       index >= 50 && price > movingAverage50[index]
-        ? { x: index, y: price } // ✅ Fix: Use { x, y } format for scatter points
+        ? { x: index, y: price }  
         : null
-    ).filter(Boolean); // ✅ Remove null values from dataset
-
+    ).filter(Boolean);  
     setChartData({  
       labels: Array.from({ length: dataPoints }, (_, i) => i),  
       datasets: [  
@@ -96,12 +95,12 @@ const TradingChart = () => {
           borderColor: "#00ff00",  
           pointBackgroundColor: "#00ff00",  
           pointRadius: 5,  
-          type: "scatter", // ✅ Fix: Ensure scatter type is explicitly defined
+          type: "scatter", 
         },  
       ].filter(Boolean),  
     });
 
-  }, [selectedIndicators, strategyApplied]); // ✅ Fix: Proper dependencies
+  }, [selectedIndicators, strategyApplied]); 
 
   useEffect(() => {
     generateRandomData();

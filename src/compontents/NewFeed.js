@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { db, auth } from "./Firebase"; // Import Firebase config
+import { db, auth } from "./Firebase";  
 import { doc, getDoc } from "firebase/firestore";
-import { saveToWatchlist } from "./Watchlistservice"; // Import watchlist function
+import { saveToWatchlist } from "./Watchlistservice"; 
 import "./Newsfeed.css";
 
-const API_KEY ="QL896HwnMDgalGAlFyVWiPwwUPaA8tfqY8e0-zsnfD6taQEw" // Replace with your Currents API key
+
+const API_KEY = "QL896HwnMDgalGAlFyVWiPwwUPaA8tfqY8e0-zsnfD6taQEw";
+
+const DEFAULT_TRADING_TOPICS = ["stocks", "crypto", "forex", "commodities"]; 
 
 const NewsFeed = () => {
   const [articles, setArticles] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState(["trading"]); // Default category
+  const [userPreferences, setUserPreferences] = useState([]);
 
-  // Fetch news from Currents API
-  const fetchNews = async (categories) => {
-    if (categories.length === 0) return;
-    const query = categories.join(" OR "); // Currents API supports OR-based keyword search
-    const NEWS_URL = `https://api.currentsapi.services/v1/search?keywords=${query}&language=en&apiKey=${API_KEY}`;
+  
+  const fetchNews = async (preferences) => {
+    if (!preferences.length) return; 
+
+    const query = preferences.join(" OR "); 
+    const NEWS_URL = `https://api.currentsapi.services/v1/search?keywords=${query}&category=business&language=en&apiKey=${API_KEY}`;
 
     try {
       const response = await axios.get(NEWS_URL);
       if (response.data.news) {
         setArticles(response.data.news.slice(0, 20));
       } else {
-        console.error("🚨 Unexpected API response:", response.data);
+        console.error("Unexpected API response:", response.data);
         setArticles([]);
       }
     } catch (error) {
-      console.error("🚨 Error fetching news:", error.response ? error.response.data : error.message);
+      console.error(" Error fetching news:", error.response ? error.response.data : error.message);
     }
   };
 
-  // Fetch user preferences from Firestore
+  
   useEffect(() => {
     const fetchPreferences = async () => {
       const user = auth.currentUser;
@@ -38,8 +42,8 @@ const NewsFeed = () => {
         const docRef = doc(db, "users", user.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          const prefs = docSnap.data().preferences || ["trading"];
-          setSelectedCategories(prefs);
+          const prefs = docSnap.data().preferences || DEFAULT_TRADING_TOPICS; 
+          setUserPreferences(prefs);
         }
       }
     };
@@ -47,14 +51,14 @@ const NewsFeed = () => {
     fetchPreferences();
   }, []);
 
-  // Fetch news when selectedCategories change
+  
   useEffect(() => {
-    fetchNews(selectedCategories);
-    const interval = setInterval(() => fetchNews(selectedCategories), 300000);
-    return () => clearInterval(interval);
-  }, [selectedCategories]);
+    if (userPreferences.length) {
+      fetchNews(userPreferences);
+    }
+  }, [userPreferences]);
 
-  // Handle "Read More" and save article to watchlist
+  
   const handleReadMore = async (article) => {
     await saveToWatchlist(article);
     window.open(article.url, "_blank");
@@ -62,28 +66,14 @@ const NewsFeed = () => {
 
   return (
     <div className="news-container">
-      <h2>Latest Trading News</h2>
+      <h2>Trading News</h2>
 
-      {/* Category Selection */}
-      <nav className="news-nav">
-        {["All", "Stocks", "Crypto", "Forex", "Commodities"].map((category) => (
-          <button
-            key={category}
-            className={selectedCategories.includes(category.toLowerCase()) ? "active" : ""}
-            onClick={() => setSelectedCategories([category.toLowerCase()])}
-          >
-            {category}
-          </button>
-        ))}
-      </nav>
-
-      {/* News Articles */}
+    
       <div className="news-list">
         {articles.length > 0 ? (
           articles.map((article, index) => (
             <div key={index} className="news-item">
               <h3>{article.title}</h3>
-              {article.image && <img src={article.image} alt="News" width="200" />}
               <p>{article.description}</p>
               <a
                 href={article.url}
@@ -96,7 +86,6 @@ const NewsFeed = () => {
               >
                 Read More
               </a>
-              <p><small>Published on: {new Date(article.published * 1000).toLocaleString()}</small></p>
             </div>
           ))
         ) : (

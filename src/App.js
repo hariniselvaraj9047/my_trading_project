@@ -4,7 +4,7 @@ import Navbar from "./compontents/Navbar";
 import Login from "./compontents/Login";
 import Register from "./compontents/Register";
 import Profile from "./compontents/Profile";
-import TradingNews from "./compontents/NewFeed"; // Assuming this is your news feed component
+import TradingNews from "./compontents/NewFeed";  
 import TradingChart from "./compontents/Tradingchart";
 
 function App() {

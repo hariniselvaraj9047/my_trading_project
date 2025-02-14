@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { auth, db } from "./Firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { getWatchlist } from "./Watchlistservice"; // Import the getWatchlist function
+import { getWatchlist } from "./Watchlistservice"; 
 import "./Profile.css";
 
 function Profile() {
@@ -26,7 +26,7 @@ function Profile() {
     });
   };
 
-  // Fetch Watchlist Data
+  
   const fetchWatchlistData = async () => {
     const data = await getWatchlist();
     setWatchlist(data);
@@ -37,7 +37,7 @@ function Profile() {
     fetchWatchlistData();
   }, []);
 
-  // Handle Logout
+  
   async function handleLogout() {
     try {
       await auth.signOut();
@@ -59,7 +59,7 @@ function Profile() {
             <p><strong>First Name:</strong> {userDetails.firstName}</p>
           </div>
 
-          {/* Watchlist Section */}
+          
           <h4>Your Watchlist</h4>
           <ul className="watchlist">
             {watchlist.length > 0 ? (

@@ -3,29 +3,29 @@ import React, { useState } from "react";
 import { auth } from "./Firebase";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SignInWithGoogle from "./SignupWithGoogle";
+
 import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // State for error messages
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage(""); // Clear previous errors
+    setErrorMessage("");  
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("User logged in successfully!", { position: "top-center" });
-      window.location.href = "/profile"; // Redirect after success
+      window.location.href = "/profile";  
     } catch (error) {
       setLoading(false);
       let message = "";
 
-      // Handling Firebase error codes
+       
       switch (error.code) {
         case "auth/user-not-found":
           message = "Email is not registered. Please sign up first.";
@@ -43,7 +43,7 @@ function Login() {
           message = "Login failed. Please check your credentials.";
       }
 
-      setErrorMessage(message); // Show error message on screen
+      setErrorMessage(message);  
     }
   };
 
@@ -52,10 +52,9 @@ function Login() {
       <form onSubmit={handleSubmit} className="login-form">
         <h3>Login</h3>
 
-        {/* Show error message */}
+        
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-        {/* Email Input */}
+  
         <div className="mb-3">
           <label>Email Address</label>
           <input
@@ -68,7 +67,7 @@ function Login() {
           />
         </div>
 
-        {/* Password Input */}
+        
         <div className="mb-3">
           <label>Password</label>
           <input
@@ -81,20 +80,19 @@ function Login() {
           />
         </div>
 
-        {/* Login Button */}
+        
         <div className="d-grid">
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </div>
 
-        {/* Register Link */}
+        
         <p className="forgot-password text-right">
           New user? <a href="/register">Register Here</a>
         </p>
 
-        {/* Google Sign-in Option */}
-        <SignInWithGoogle />
+       
       </form>
     </div>
   );

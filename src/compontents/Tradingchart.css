@@ -1,4 +1,4 @@
-/* Global Styling */
+
 body {
   background: linear-gradient(to right, #1a0026, #3b1e58);
   font-family: "Inter", "Nunito", sans-serif;
@@ -12,7 +12,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Chart Container */
+
 .chart-container {
   background: rgba(255, 255, 255, 0.1);
   padding: 30px;
@@ -28,21 +28,20 @@ body {
   justify-content: center;
 }
 
-/* Chart Wrapper to Allow Scrolling */
+
 .chart-wrapper {
   width: 100%;
-  overflow-x: auto; /* Enable scrolling if the chart is too wide */
+  overflow-x: auto; 
   display: flex;
   justify-content: center;
 }
 
-/* Chart */
 canvas {
   max-width: 100%;
   height: auto !important;
 }
 
-/* Controls */
+
 .controls {
   display: flex;
   flex-direction: column;
@@ -79,7 +78,7 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Responsive Adjustments */
+
 @media (max-width: 1024px) {
   .chart-container {
     width: 95%;

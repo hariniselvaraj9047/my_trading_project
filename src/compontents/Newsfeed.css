@@ -1,9 +1,9 @@
-/* Import Google Fonts */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Nunito:wght@300;400;600&display=swap');
 
-/* Global Styling */
+
 body {
-  background-color: #f0f0f0; /* Optional: background color for the body */
+  background-color: #f0f0f0;  
   font-family: "Inter", "Nunito", sans-serif;
   display: flex;
   justify-content: center;
@@ -12,12 +12,12 @@ body {
   margin: 0;
 }
 
-/* News Container */
+
 .news-container {
   max-width: 800px;
   margin: 40px auto;
   padding: 25px;
-  background: linear-gradient(to right, #1a0026, #3b1e58); /* Gradient with deep purple */
+  background: linear-gradient(to right, #1a0026, #3b1e58); 
   border-radius: 15px;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
@@ -28,7 +28,7 @@ body {
   animation: fadeIn 1s ease-out;
 }
 
-/* Fade-in animation */
+ 
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -40,24 +40,24 @@ body {
 
 /* Heading */
 .news-container h2 {
-  color: #E3C9E6; /* Soft Lavender */
+  color: #E3C9E6;  
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 20px;
 }
 
-/* News List */
+
 .news-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* News Item */
+
 .news-item {
-  background: rgba(255, 255, 255, 0.1); /* Slightly Transparent */
+  background: rgba(255, 255, 255, 0.1);
   padding: 15px;
-  border-left: 4px solid #AEBBB4; /* Muted Sage Green */
+  border-left: 4px solid #AEBBB4; 
   border-radius: 8px;
   transition: transform 0.3s ease, background 0.3s ease;
   text-align: left;
@@ -65,7 +65,7 @@ body {
   animation: slideUp 0.5s ease-out;
 }
 
-/* Slide-up effect for each news item */
+
 @keyframes slideUp {
   0% {
     transform: translateY(20px);
@@ -82,27 +82,27 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* News Title */
+ 
 .news-item h3 {
   font-size: 18px;
-  color: #5D4C94; /* Deep Violet */
+  color: #5D4C94;  
   font-weight: 700;
   margin-bottom: 6px;
 }
 
-/* News Description */
+
 .news-item p {
   font-size: 14px;
-  color: #AEBBB4; /* Muted Sage Green */
+  color: #AEBBB4; 
   margin-bottom: 8px;
 }
 
-/* Read More Button */
+ 
 .news-item a {
   display: inline-block;
   padding: 8px 12px;
-  background: #9E7DC4; /* Lilac Purple */
-  color: #3D2D75; /* Dark Indigo */
+  background: #9E7DC4;  
+  color: #3D2D75; 
   text-decoration: none;
   font-weight: 600;
   border-radius: 5px;
@@ -110,11 +110,11 @@ body {
 }
 
 .news-item a:hover {
-  background: #5D4C94; /* Deep Violet */
+  background: #5D4C94;  
   color: #E3C9E6;
 }
 
-/* Responsive Design */
+
 @media screen and (max-width: 768px) {
   .news-container {
     max-width: 90%;
@@ -137,9 +137,9 @@ body {
 
 
 
-/* News Navbar */
+
 .news-nav {
-  background: linear-gradient(to right, #1a0026, #3b1e58); /* Deep purple gradient */
+  background: linear-gradient(to right, #1a0026, #3b1e58); 
   padding: 10px;
   display: flex;
   justify-content: center;
@@ -151,10 +151,10 @@ body {
   animation: fadeIn 1s ease-out;
 }
 
-/* News Navbar Buttons */
+
 .news-nav button {
-  background: rgba(255, 255, 255, 0.1); /* Transparent button */
-  color: #E3C9E6; /* Soft Lavender */
+  background: rgba(255, 255, 255, 0.1); 
+  color: #E3C9E6; 
   font-size: 14px;
   font-weight: 600;
   padding: 8px 15px;
@@ -165,19 +165,19 @@ body {
   margin: 0 10px;
 }
 
-/* Active Category Button */
+
 .news-nav button.active {
-  background: #9E7DC4; /* Lilac Purple */
-  color: #3D2D75; /* Dark Indigo */
+  background: #9E7DC4;  
+  color: #3D2D75;  
 }
 
-/* Hover Effects */
+
 .news-nav button:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
 }
 
-/* Responsive News Navbar */
+ 
 @media screen and (max-width: 768px) {
   .news-nav {
     flex-wrap: wrap;

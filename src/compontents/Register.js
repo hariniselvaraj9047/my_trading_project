@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { auth, db } from "./Firebase";
 import { setDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import Modal from "react-modal"; // Install: 
+import Modal from "react-modal"; 
 import "./Register.css";
 
-Modal.setAppElement("#root"); // Ensure accessibility
+Modal.setAppElement("#root"); 
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -15,7 +15,7 @@ function Register() {
   const [lname, setLname] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  const [modalType, setModalType] = useState("success"); // "success" or "error"
+  const [modalType, setModalType] = useState("success"); 
   const navigate = useNavigate();
 
   const showModal = (message, type) => {
@@ -26,7 +26,7 @@ function Register() {
     if (type === "success") {
       setTimeout(() => {
         setModalIsOpen(false);
-        navigate("/login"); // Redirect after success
+        navigate("/login"); 
       }, 2000);
     }
   };
@@ -120,7 +120,7 @@ function Register() {
         </p>
       </form>
 
-      {/* Modal for Messages */}
+    
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -136,40 +136,3 @@ function Register() {
 }
 
 export default Register;
-/*import React, { useState } from "react";
-import { auth, db, createUserWithEmailAndPassword, setDoc, doc } from "./Firebase";
-
-const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const registerUser = async () => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Save user data to Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        preferences: [],
-        watchlist: [],
-        portfolio: []
-      });
-
-      alert("User registered successfully!");
-    } catch (error) {
-      console.error("Error registering:", error.message);
-    }
-  };
-
-  return (
-    <div>
-      <h2>Register</h2>
-      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={registerUser}>Register</button>
-    </div>
-  );
-};
-
-export default Register;*/

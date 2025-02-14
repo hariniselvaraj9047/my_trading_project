@@ -1,6 +1,6 @@
-/* Global Styling */
+
 body {
-   background: linear-gradient(to right, #1a0026, #3b1e58); /* Gradient background */
+   background: linear-gradient(to right, #1a0026, #3b1e58);
    font-family: "Inter", "Nunito", sans-serif;
    display: flex;
    justify-content: center;
@@ -8,25 +8,25 @@ body {
    min-height: 100vh;
    margin: 0;
    color: white; 
-   /* Default text color for readability */
+   
  }
  
- /* Form Container */
+ 
  form {
-   background: rgba(255, 255, 255, 0.1); /* Slight transparent background */
+   background: rgba(255, 255, 255, 0.1); 
    padding: 30px;
    border-radius: 10px;
    text-align: center;
-   width: 100%; /* Ensure form occupies full width available */
-   max-width: 600px; /* Width same as login page container */
+   width: 100%; 
+   max-width: 600px; 
    margin: 20px auto;
    animation: fadeIn 1s ease-out;
-   backdrop-filter: blur(10px); /* Optional: Apply blur effect behind the form */
+   backdrop-filter: blur(10px); 
    box-sizing: border-box; 
-   width: 600px;/* Ensure padding is included in the width */
+   width: 600px;
  }
  
- /* Fade-in animation */
+ 
  @keyframes fadeIn {
    0% {
      opacity: 0;
@@ -36,81 +36,81 @@ body {
    }
  }
  
- /* Heading */
+ 
  form h3 {
-   color: #e3c9e6; /* Soft Lavender */
+   color: #e3c9e6; 
    font-size: 24px;
    margin-bottom: 20px;
  }
  
- /* Label and Input Field Alignment */
+ 
  .mb-3 {
-   margin-bottom: 20px; /* Vertical spacing between each field */
+   margin-bottom: 20px; 
    display: flex;
    flex-direction: column;
-   align-items: center; /* Ensures the label and input are centered */
+   align-items: center; 
    justify-content: center;
    width: 100%;
  }
  
  label {
-   color: #e3c9e6; /* Soft Lavender */
+   color: #e3c9e6; 
    font-size: 16px;
-   margin-bottom: 8px; /* Space between label and input field */
+   margin-bottom: 8px; 
    text-align: left;
-   width: 100%; /* Make sure label occupies full width for consistency */
+   width: 100%; 
  }
  
- /* Input Fields */
+ 
  input[type="email"],
  input[type="password"],
  input[type="text"] {
-   width: 100%; /* Ensures the input fields take the full available width */
+   width: 100%; 
    padding: 12px;
    border-radius: 8px;
-   border: 1px solid #aebbb4; /* Muted Sage Green */
+   border: 1px solid #aebbb4; 
    background-color: rgba(255, 255, 255, 0.1);
-   color: #e3c9e6; /* Soft Lavender */
+   color: #e3c9e6; 
    font-size: 16px;
    transition: border 0.3s ease;
-   box-sizing: border-box; /* Ensure padding doesn't overflow */
+   box-sizing: border-box; 
  }
  
  input[type="email"]:focus,
  input[type="password"]:focus,
  input[type="text"]:focus {
-   border: 1px solid #9e7dc4; /* Lilac Purple */
+   border: 1px solid #9e7dc4; 
    outline: none;
  }
  
- /* Submit Button */
+ 
  button[type="submit"] {
-   width: 100%; /* Ensures the button takes the full width like input fields */
+   width: 100%; 
    padding: 12px;
-   background-color: #9e7dc4; /* Lilac Purple */
+   background-color: #9e7dc4; 
    border: none;
    border-radius: 8px;
-   color: #1a0026; /* Dark Indigo */
+   color: #1a0026; 
    font-weight: bold;
    cursor: pointer;
    transition: background 0.3s ease-in-out;
    display: block;
-   margin: 0 auto; /* This centers the button */
-   box-sizing: border-box; /* Ensure padding doesn't overflow */
+   margin: 0 auto; 
+   box-sizing: border-box; 
  }
  
  button[type="submit"]:hover {
-   background-color: #5d4c94; /* Deep Violet */
+   background-color: #5d4c94; 
  }
  
- /* Forgot Password and Links */
+ 
  .forgot-password {
    margin-top: 20px;
-   color: #aebbb4; /* Muted Sage Green */
+   color: #aebbb4; 
  }
  
  .forgot-password a {
-   color: #9e7dc4; /* Lilac Purple */
+   color: #9e7dc4; 
    text-decoration: none;
  }
  
@@ -118,7 +118,7 @@ body {
    text-decoration: underline;
  }
  
- /* Responsive Design */
+ /
  @media (max-width: 768px) {
    form {
      width: 95%;
