@@ -9,11 +9,21 @@ import {
   Title,
   Tooltip,
   Legend,
+  ScatterController, // ✅ Fix: Import ScatterController
 } from "chart.js";
 import "./Tradingchart.css";
 
-// Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+// ✅ Fix: Register ScatterController along with other components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ScatterController // ✅ Fix: Register ScatterController
+);
 
 const TradingChart = () => {
   const [chartData, setChartData] = useState(null);
@@ -36,9 +46,11 @@ const TradingChart = () => {
     const movingAverage20 = calculateMovingAverage(prices, 20);  
     const bollingerBands = calculateBollingerBands(prices, 20);  
 
-    const buySignals = prices.map((price, index) =>  
-      index >= 50 && price > movingAverage50[index] ? price : null  
-    );  
+    const buySignals = prices.map((price, index) =>
+      index >= 50 && price > movingAverage50[index]
+        ? { x: index, y: price } // ✅ Fix: Use { x, y } format for scatter points
+        : null
+    ).filter(Boolean); // ✅ Remove null values from dataset
 
     setChartData({  
       labels: Array.from({ length: dataPoints }, (_, i) => i),  
@@ -66,14 +78,14 @@ const TradingChart = () => {
         },  
         selectedIndicators.includes("Bollinger") && {  
           label: "Upper Bollinger Band",  
-          data: bollingerBands.upper,  
+          data: bollingerBands.map(point => point.upper),  
           borderColor: "#5d4c94",  
           borderWidth: 1,  
           borderDash: [3, 3],  
         },  
         selectedIndicators.includes("Bollinger") && {  
           label: "Lower Bollinger Band",  
-          data: bollingerBands.lower,  
+          data: bollingerBands.map(point => point.lower),  
           borderColor: "#5d4c94",  
           borderWidth: 1,  
           borderDash: [3, 3],  
@@ -84,17 +96,16 @@ const TradingChart = () => {
           borderColor: "#00ff00",  
           pointBackgroundColor: "#00ff00",  
           pointRadius: 5,  
-          type: "scatter",  
+          type: "scatter", // ✅ Fix: Ensure scatter type is explicitly defined
         },  
       ].filter(Boolean),  
     });
 
-  }, [selectedIndicators, strategyApplied]); // ✅ Dependencies fixed
+  }, [selectedIndicators, strategyApplied]); // ✅ Fix: Proper dependencies
 
-  // Run data generation on initial render & when dependencies change
   useEffect(() => {
     generateRandomData();
-  }, [generateRandomData]); // ✅ Dependency added
+  }, [generateRandomData]);
 
   const calculateMovingAverage = (prices, period) => {
     return prices.map((_, index, arr) => {
