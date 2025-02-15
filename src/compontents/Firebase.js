@@ -12,7 +12,7 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_MY_APPID,
   measurementId: process.env.REACT_APP_MY_MEASUREMENTID,
 };
- console.log( process.env.REACT_APP_MY_APPID)
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
